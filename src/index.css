@@ -79,3 +79,14 @@ html, body, #root {
 
 .uw-tab-active { color: var(--ink); border-bottom: 2px solid var(--ember); }
 .uw-tab { color: var(--ink-muted); border-bottom: 2px solid transparent; }
+
+.uw-input { background: var(--surface); border: 1px solid var(--line); color: var(--ink); }
+.uw-input::placeholder { color: var(--ink-muted); }
+.uw-input:focus { border-color: var(--ember); outline: none; }
+.uw-input-active { border-color: var(--ember) !important; background: var(--surface2); }
+
+.uw-textarea { background: var(--surface2); border: 1px solid var(--line); color: var(--ink); resize: vertical; }
+.uw-textarea::placeholder { color: var(--ink-muted); }
+.uw-textarea:focus { border-color: var(--ember); outline: none; }
+
+.uw-modal-backdrop { background: rgba(0, 0, 0, 0.6); }
