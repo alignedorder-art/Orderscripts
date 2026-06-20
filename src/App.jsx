@@ -100,29 +100,37 @@ function buildSystemPrompt(theme, trigger, duration, customBrief) {
 
 BRAND VOICE: grounded in psychology, neuroscience, and Jungian shadow work. Dark, cinematic, emotionally honest — never clinical, never preachy, never generic self-help. Speaks to the viewer like someone who has been in the dark with them and found a way out.
 
-FRAMEWORK — Donald Miller's StoryBrand, applied to a single-person video:
+VILLAIN — Donald Miller's StoryBrand, applied to a single-person video:
 - The VIEWER is the hero. Never the brand, never the founder.
 - The VILLAIN of every script is some expression of the unconscious mind — old wiring, automatic programming, a protective mechanism installed long before the viewer could consent to it. Externalize it. The viewer is not broken; something is running underneath them without permission.
 - Open with a SURVIVAL-LEVEL stake within the first 1-2 sentences — the kind of line that trips the brain's threat-and-relevance detector, so it feels personally urgent rather than abstractly interesting.
-- Make the problem concrete (external), name the internal feeling it produces (internal), and gesture at why it matters beyond just this one viewer (philosophical) — without ever using those three labels on screen.
-- Offer ONE clear, simple insight or reframe (the plan) — something a viewer could act on today, not a vague platitude.
-- End with a direct call to action sized for the format (follow for the next pattern, save this, send it to someone stuck in this, or a soft mention of Aligned Order's coaching work) — never hard-sell.
-- Sentences are short. Spoken rhythm, not written rhythm. No jargon unless immediately translated into plain language. Concrete imagery over abstraction.
+
+STRUCTURE — the body of the script follows Donald Miller's PEACE framework, beat by beat:
+- P — Problem: name the specific problem precisely, rooted in the villain established above.
+- E — Empathy: show the viewer you understand exactly how this feels, in plain, felt language — no clinical distance, no platitudes.
+- A — Answer: deliver ONE clear insight or reframe that addresses the problem — something a viewer could act on today, not a vague platitude.
+- C — Change: make concrete what's different once the viewer applies the answer — a specific before/after, a shift in behavior or self-perception.
+- E — End Result: paint the end state — who they get to become, what becomes possible, the version of safety, belonging, or status they get to keep.
+Each beat should read as one continuous piece of spoken language flowing into the next — these are structural instructions for you, not headers to say out loud. For very short durations, compress each beat to a single short line rather than skipping it.
+
+CALL TO ACTION: end with a direct call to action sized for the format (follow for the next pattern, save this, send it to someone stuck in this, or a soft mention of Aligned Order's coaching work) — never hard-sell.
+
+VOICE: Sentences are short. Spoken rhythm, not written rhythm. No jargon unless immediately translated into plain language. Concrete imagery over abstraction.
 
 THIS SCRIPT:
 Theme (the lens): ${theme.label} — ${theme.promptAngle}
 Trigger (the survival hook): ${trigger.label} — ${trigger.promptAngle}
-Target length: ${duration.label} spoken video (~${duration.words} words total across hook + body + CTA, at natural spoken pace). Stay close to this word count — it determines whether the script fits the runtime.${briefSection}
+Target length: ${duration.label} spoken video (~${duration.words} words total across hook + the five PEACE beats + CTA, at natural spoken pace). Stay close to this word count — it determines whether the script fits the runtime.${briefSection}
 
 OUTPUT FORMAT — respond with ONLY valid JSON, no markdown fences, no commentary, matching exactly this shape:
-{"title":"short internal title for this script","hook":"the first 1-3 spoken sentences, the pattern interrupt","body":"the main spoken body — problem, villain reveal, the plan or insight","cta":"the final spoken call to action, 1-2 sentences","onScreenText":["short text overlay cue 1","short text overlay cue 2","short text overlay cue 3"],"caption":"a short social caption with line breaks as \\n, ending in 3-5 relevant hashtags"}
+{"title":"short internal title for this script","hook":"the first 1-3 spoken sentences, the pattern interrupt","problem":"the Problem beat","empathy":"the Empathy beat","answer":"the Answer beat","change":"the Change beat","endResult":"the End Result beat","cta":"the final spoken call to action, 1-2 sentences","onScreenText":["short text overlay cue 1","short text overlay cue 2","short text overlay cue 3"],"caption":"a short social caption with line breaks as \\n, ending in 3-5 relevant hashtags"}
 
 Write the full script now for this theme, trigger, and duration.`;
 }
 
 function fullScriptText(s) {
   const cues = (s.onScreenText || []).map((t) => "- " + t).join("\n");
-  return `${s.title}\n\nHOOK:\n${s.hook}\n\nBODY:\n${s.body}\n\nCTA:\n${s.cta}\n\nON-SCREEN TEXT:\n${cues}\n\nCAPTION:\n${s.caption}`;
+  return `${s.title}\n\nHOOK:\n${s.hook}\n\nPROBLEM:\n${s.problem}\n\nEMPATHY:\n${s.empathy}\n\nANSWER:\n${s.answer}\n\nCHANGE:\n${s.change}\n\nEND RESULT:\n${s.endResult}\n\nCTA:\n${s.cta}\n\nON-SCREEN TEXT:\n${cues}\n\nCAPTION:\n${s.caption}`;
 }
 
 function timeAgo(ts) {
@@ -284,7 +292,11 @@ export default function App() {
       durationLabel: selectedDuration.label,
       title: script.title,
       hook: script.hook,
-      body: script.body,
+      problem: script.problem,
+      empathy: script.empathy,
+      answer: script.answer,
+      change: script.change,
+      endResult: script.endResult,
       cta: script.cta,
       onScreenText: script.onScreenText || [],
       caption: script.caption,
@@ -568,9 +580,27 @@ export default function App() {
                   <p className="uw-display text-lg sm:text-xl leading-snug uw-ink">{script.hook}</p>
                 </div>
 
-                <div className="mb-5">
-                  <div className="uw-mono uw-muted text-[11px] uppercase tracking-widest mb-2">Body</div>
-                  <p className="text-[15px] leading-relaxed uw-ink whitespace-pre-line">{script.body}</p>
+                <div className="mb-5 flex flex-col gap-4">
+                  <div>
+                    <div className="uw-mono uw-muted text-[11px] uppercase tracking-widest mb-1">Problem</div>
+                    <p className="text-[15px] leading-relaxed uw-ink">{script.problem}</p>
+                  </div>
+                  <div>
+                    <div className="uw-mono uw-muted text-[11px] uppercase tracking-widest mb-1">Empathy</div>
+                    <p className="text-[15px] leading-relaxed uw-ink">{script.empathy}</p>
+                  </div>
+                  <div>
+                    <div className="uw-mono uw-teal-text text-[11px] uppercase tracking-widest mb-1">Answer</div>
+                    <p className="text-[15px] leading-relaxed uw-ink">{script.answer}</p>
+                  </div>
+                  <div>
+                    <div className="uw-mono uw-teal-text text-[11px] uppercase tracking-widest mb-1">Change</div>
+                    <p className="text-[15px] leading-relaxed uw-ink">{script.change}</p>
+                  </div>
+                  <div>
+                    <div className="uw-mono uw-ember-text text-[11px] uppercase tracking-widest mb-1">End Result</div>
+                    <p className="text-[15px] leading-relaxed uw-ink">{script.endResult}</p>
+                  </div>
                 </div>
 
                 <div className="uw-cta-box rounded-lg p-4 mb-5">
@@ -672,9 +702,27 @@ export default function App() {
                           <div className="uw-mono uw-muted text-[10px] uppercase tracking-widest mb-1">Hook</div>
                           <p className="uw-display text-base uw-ink">{item.hook}</p>
                         </div>
-                        <div className="mb-3">
-                          <div className="uw-mono uw-muted text-[10px] uppercase tracking-widest mb-1">Body</div>
-                          <p className="text-sm leading-relaxed uw-ink whitespace-pre-line">{item.body}</p>
+                        <div className="mb-3 flex flex-col gap-2.5">
+                          <div>
+                            <div className="uw-mono uw-muted text-[10px] uppercase tracking-widest mb-1">Problem</div>
+                            <p className="text-sm leading-relaxed uw-ink">{item.problem}</p>
+                          </div>
+                          <div>
+                            <div className="uw-mono uw-muted text-[10px] uppercase tracking-widest mb-1">Empathy</div>
+                            <p className="text-sm leading-relaxed uw-ink">{item.empathy}</p>
+                          </div>
+                          <div>
+                            <div className="uw-mono uw-teal-text text-[10px] uppercase tracking-widest mb-1">Answer</div>
+                            <p className="text-sm leading-relaxed uw-ink">{item.answer}</p>
+                          </div>
+                          <div>
+                            <div className="uw-mono uw-teal-text text-[10px] uppercase tracking-widest mb-1">Change</div>
+                            <p className="text-sm leading-relaxed uw-ink">{item.change}</p>
+                          </div>
+                          <div>
+                            <div className="uw-mono uw-ember-text text-[10px] uppercase tracking-widest mb-1">End Result</div>
+                            <p className="text-sm leading-relaxed uw-ink">{item.endResult}</p>
+                          </div>
                         </div>
                         <div className="uw-cta-box rounded-lg p-3 mb-3">
                           <div className="uw-mono uw-ember-text text-[10px] uppercase tracking-widest mb-1">CTA</div>
