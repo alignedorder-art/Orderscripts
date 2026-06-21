@@ -74,6 +74,7 @@ const DURATIONS = [
 
 const LOADING_MESSAGES = [
   "Listening for the pattern...",
+  "Checking how this actually gets talked about...",
   "Tracing the wiring...",
   "Naming the villain...",
   "Pulling it into words...",
@@ -115,7 +116,16 @@ Each beat should read as one continuous piece of spoken language flowing into th
 
 CALL TO ACTION: end with a direct call to action sized for the format (follow for the next pattern, save this, send it to someone stuck in this, or a soft mention of Aligned Order's coaching work) — never hard-sell.
 
-VOICE: Sentences are short. Spoken rhythm, not written rhythm. No jargon unless immediately translated into plain language. Concrete imagery over abstraction.
+GROUNDING: Before writing, think the way a well-researched creator would — pull from how real psychologists, researchers, and creators actually discuss this exact pattern, the kind of specific framing you'd find in articles, interviews, and talks on the subject. Use web search if it helps you find that real-world specificity: a concrete mechanism, a believable example, a turn of phrase a real person would use. Then write the script ENTIRELY in your own original words — synthesize the idea fresh rather than echoing any one source's phrasing or structure. If a concept clearly belongs to a named researcher or framework (e.g. polyvagal theory, attachment theory), it's fine to name it in passing, the way you'd credit an idea in conversation. Never quote or closely paraphrase a specific passage, video, or article. If you search, your final output must still be ONLY the JSON object below — no commentary about what you found.
+
+SOUND HUMAN, NOT LIKE AI — avoid every one of these tells:
+- No "In today's fast-paced world," "Let's dive in," "It's important to note," or similar throat-clearing.
+- No neat rule-of-three lists unless that's genuinely how a person would say it out loud.
+- No perfectly symmetrical sentence pairs ("It's not about X, it's about Y") used more than once in a script.
+- Vary sentence length on purpose — a few words, then a longer one, the way real speech actually moves.
+- Use contractions. Let a sentence trail off, or start one with "And" or "But," if that's how it would actually be said.
+- Pick ONE specific, concrete, slightly unexpected image or example over a generic one.
+- Sound like a person who has lived this, not a brand presenting a concept.
 
 THIS SCRIPT:
 Theme (the lens): ${theme.label} — ${theme.promptAngle}
@@ -255,9 +265,9 @@ export default function App() {
       });
       const data = await res.json();
       if (data.error) throw new Error(data.error);
-      const textBlock = (data.content || []).find((b) => b.type === "text");
-      if (!textBlock) throw new Error("empty response");
-      let raw = textBlock.text.trim();
+      const textBlocks = (data.content || []).filter((b) => b.type === "text");
+      if (textBlocks.length === 0) throw new Error("empty response");
+      let raw = textBlocks[textBlocks.length - 1].text.trim();
       raw = raw.replace(/^```(json)?/, "").replace(/```$/, "").trim();
       const parsed = JSON.parse(raw);
       setScript(parsed);
@@ -337,7 +347,8 @@ export default function App() {
 
   return (
     <div className="undertow-root w-full">
-      <div className="max-w-5xl mx-auto px-4 sm:px-8 py-10">
+      <div className="uw-ambient" />
+      <div className="uw-content max-w-5xl mx-auto px-4 sm:px-8 py-10">
         {/* HEADER */}
         <div className="flex items-start justify-between gap-4 mb-8 flex-wrap">
           <div>
@@ -346,7 +357,7 @@ export default function App() {
             </div>
             <div className="flex items-center gap-3">
               <Waves size={26} className="uw-ember-text" />
-              <h1 className="uw-display text-3xl sm:text-4xl font-semibold uw-ink">Undertow</h1>
+              <h1 className="uw-display text-3xl sm:text-4xl font-medium uw-ink">Undertow</h1>
             </div>
             <p className="uw-muted text-sm mt-2 max-w-md">
               Daily script lab. Built on the StoryBrand framework — the unconscious mind plays the villain in every script.
@@ -510,7 +521,7 @@ export default function App() {
                 className="fixed inset-0 uw-modal-backdrop flex items-center justify-center p-4 z-50"
                 onClick={() => setShowBriefModal(false)}
               >
-                <div className="uw-surface uw-border rounded-2xl p-5 w-full max-w-md" onClick={(e) => e.stopPropagation()}>
+                <div className="uw-surface uw-border uw-shadow-soft rounded-2xl p-5 w-full max-w-md" onClick={(e) => e.stopPropagation()}>
                   <div className="flex items-center justify-between mb-3">
                     <h3 className="uw-display text-lg uw-ink">Your own idea</h3>
                     <button onClick={() => setShowBriefModal(false)} className="uw-btn-ghost rounded-lg p-1.5">
@@ -544,7 +555,7 @@ export default function App() {
             <button
               onClick={generateScript}
               disabled={!selectedTheme || !selectedTrigger || !selectedDuration || loading}
-              className="uw-btn-ember rounded-xl w-full py-3.5 font-medium flex items-center justify-center gap-2 mb-2"
+              className="uw-btn-ember uw-shadow-button rounded-xl w-full py-3.5 font-medium flex items-center justify-center gap-2 mb-2"
             >
               {loading ? (
                 <>
@@ -562,7 +573,7 @@ export default function App() {
 
             {/* OUTPUT */}
             {script && (
-              <div className="uw-surface uw-border rounded-2xl p-5 sm:p-7 mt-6">
+              <div className="uw-surface uw-border uw-shadow-soft rounded-2xl p-5 sm:p-7 mt-6">
                 <div className="flex flex-wrap gap-2 mb-4">
                   {selectedTheme && (
                     <span className={`uw-tag rounded px-2 py-1 ${selectedTheme.featured ? "uw-tag-rust" : "uw-tag-ember"}`}>
@@ -662,7 +673,7 @@ export default function App() {
                 const isOpen = expandedKey === item.id;
                 const isConfirming = deleteConfirmKey === item.id;
                 return (
-                  <div key={item.id} className="uw-surface uw-border rounded-2xl p-4">
+                  <div key={item.id} className="uw-surface uw-border uw-shadow-soft rounded-2xl p-4">
                     <div className="flex items-start justify-between gap-3">
                       <button onClick={() => setExpandedKey(isOpen ? null : item.id)} className="flex-1 text-left">
                         <div className="flex flex-wrap gap-1.5 mb-2">
