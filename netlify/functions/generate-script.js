@@ -40,9 +40,10 @@ export async function handler(event) {
       },
       body: JSON.stringify({
         model: "claude-sonnet-4-6",
-        max_tokens: 2048,
+        max_tokens: 3000,
         system,
         messages: [{ role: "user", content: message }],
+        tools: [{ type: "web_search_20250305", name: "web_search" }],
       }),
     });
 
